@@ -1577,7 +1577,10 @@ def generate_docx_download(text, timestamp):
         return f"Error generating DOCX: {str(e)}", 500
 
 
+# Ensure uploads directory exists
+uploads_path = os.path.join("static", "uploads")
+os.makedirs(uploads_path, exist_ok=True)
+
 if __name__ == "__main__":
-    uploads_path = os.path.join("static", "uploads")
-    os.makedirs(uploads_path, exist_ok=True)
-    app.run(debug=True)
+    # Only run development server if called directly
+    app.run(host='127.0.0.1', port=5000, debug=True)
