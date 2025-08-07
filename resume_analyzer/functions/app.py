@@ -1069,12 +1069,21 @@ def handler(event, context):
     try:
         import serverless_wsgi
         return serverless_wsgi.handle_request(app, event, context)
+    except ImportError:
+        return {
+            'statusCode': 500,
+            'headers': {'Content-Type': 'text/plain'},
+            'body': 'serverless_wsgi not available'
+        }
     except Exception as e:
         return {
             'statusCode': 500,
             'headers': {'Content-Type': 'text/plain'},
             'body': f'Error: {str(e)}'
         }
+
+# Also export the handler for Netlify
+app_handler = handler
 
 
 if __name__ == "__main__":

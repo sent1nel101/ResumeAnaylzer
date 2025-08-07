@@ -9,5 +9,5 @@
 
 [[redirects]]
   from = "/*"
-  to = "/.netlify/functions/app"
+  to = "/.netlify/functions/hello"
   status = 200
