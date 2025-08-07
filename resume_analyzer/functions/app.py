@@ -15,7 +15,7 @@ except ImportError:
     PYMUPDF_AVAILABLE = False
 
 
-app = Flask(__name__, template_folder='../templates', static_folder='../static')
+app = Flask(__name__, template_folder='../templates', static_folder='../static', static_url_path='/static')
 
 
 def get_ai_analysis(text):
@@ -1066,61 +1066,63 @@ def generate_docx_download(text, timestamp):
 # Netlify Functions handler
 def handler(event, context):
     """Netlify Functions handler."""
-    from werkzeug.serving import WSGIRequestHandler
-    import urllib.parse as urlparse
-    
-    # Parse the request
-    path = event.get('path', '/')
-    method = event.get('httpMethod', 'GET')
-    headers = event.get('headers', {})
-    body = event.get('body', '')
-    
-    # Create a WSGI environment
-    environ = {
-        'REQUEST_METHOD': method,
-        'PATH_INFO': path,
-        'QUERY_STRING': event.get('queryStringParameters', ''),
-        'CONTENT_TYPE': headers.get('content-type', ''),
-        'CONTENT_LENGTH': str(len(body)) if body else '0',
-        'HTTP_HOST': headers.get('host', 'localhost'),
-        'wsgi.version': (1, 0),
-        'wsgi.url_scheme': 'https',
-        'wsgi.input': io.StringIO(body),
-        'wsgi.errors': io.StringIO(),
-        'wsgi.multithread': False,
-        'wsgi.multiprocess': True,
-        'wsgi.run_once': False,
-    }
-    
-    # Add headers to environ
-    for key, value in headers.items():
-        key = key.replace('-', '_').upper()
-        if key not in ('CONTENT_TYPE', 'CONTENT_LENGTH'):
-            key = 'HTTP_' + key
-        environ[key] = value
-    
-    # Call the Flask app
-    response_data = []
-    
-    def start_response(status, response_headers):
-        response_data.append(status)
-        response_data.append(response_headers)
-    
-    result = app(environ, start_response)
-    
-    # Format response for Netlify
-    status_code = int(response_data[0].split()[0])
-    headers = dict(response_data[1])
-    
-    body = b''.join(result) if hasattr(result, '__iter__') else result
-    if isinstance(body, bytes):
-        body = body.decode('utf-8')
-    
-    return {
-        'statusCode': status_code,
-        'headers': headers,
-        'body': body
-    }
+    try:
+        # Simple approach - use Flask's test client
+        from werkzeug.test import Client
+        from werkzeug.wrappers import Response
+        
+        # Get request details
+        path = event.get('path', '/')
+        method = event.get('httpMethod', 'GET').upper()
+        headers = event.get('headers', {})
+        query_string = event.get('queryStringParameters', {})
+        body = event.get('body', '')
+        
+        # Convert query params to proper format
+        if query_string:
+            query_string = '&'.join([f"{k}={v}" for k, v in query_string.items()])
+        else:
+            query_string = ''
+            
+        # Handle body for POST requests
+        data = None
+        if method in ['POST', 'PUT', 'PATCH'] and body:
+            if event.get('isBase64Encoded', False):
+                import base64
+                body = base64.b64decode(body).decode('utf-8')
+            data = body
+        
+        # Create test client and make request
+        client = Client(app, Response)
+        
+        # Make the request
+        if method == 'GET':
+            response = client.get(path, query_string=query_string, headers=headers)
+        elif method == 'POST':
+            response = client.post(path, data=data, query_string=query_string, headers=headers)
+        else:
+            response = client.open(method=method, path=path, data=data, query_string=query_string, headers=headers)
+        
+        # Convert headers to dict
+        response_headers = {}
+        for key, value in response.headers:
+            response_headers[key] = value
+            
+        # Get response body
+        response_body = response.get_data(as_text=True)
+        
+        return {
+            'statusCode': response.status_code,
+            'headers': response_headers,
+            'body': response_body
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': {'Content-Type': 'text/plain'},
+            'body': f'Error: {str(e)}'
+        }
 
 
 if __name__ == "__main__":
