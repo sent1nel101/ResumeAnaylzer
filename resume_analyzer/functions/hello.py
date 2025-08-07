@@ -1,5 +1,6 @@
 def handler(event, context):
     return {
         'statusCode': 200,
-        'body': 'Hello from Netlify Function!'
+        'headers': {'Content-Type': 'text/plain'},
+        'body': 'Hello from Python Function!'
     }
