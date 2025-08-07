@@ -9,6 +9,3 @@
   from = "/*"
   to = "/.netlify/functions/app"
   status = 200
-
-[functions]
-  python_runtime = "python3.11"
