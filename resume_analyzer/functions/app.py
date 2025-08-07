@@ -1067,56 +1067,8 @@ def generate_docx_download(text, timestamp):
 def handler(event, context):
     """Netlify Functions handler."""
     try:
-        # Simple approach - use Flask's test client
-        from werkzeug.test import Client
-        from werkzeug.wrappers import Response
-        
-        # Get request details
-        path = event.get('path', '/')
-        method = event.get('httpMethod', 'GET').upper()
-        headers = event.get('headers', {})
-        query_string = event.get('queryStringParameters', {})
-        body = event.get('body', '')
-        
-        # Convert query params to proper format
-        if query_string:
-            query_string = '&'.join([f"{k}={v}" for k, v in query_string.items()])
-        else:
-            query_string = ''
-            
-        # Handle body for POST requests
-        data = None
-        if method in ['POST', 'PUT', 'PATCH'] and body:
-            if event.get('isBase64Encoded', False):
-                import base64
-                body = base64.b64decode(body).decode('utf-8')
-            data = body
-        
-        # Create test client and make request
-        client = Client(app, Response)
-        
-        # Make the request
-        if method == 'GET':
-            response = client.get(path, query_string=query_string, headers=headers)
-        elif method == 'POST':
-            response = client.post(path, data=data, query_string=query_string, headers=headers)
-        else:
-            response = client.open(method=method, path=path, data=data, query_string=query_string, headers=headers)
-        
-        # Convert headers to dict
-        response_headers = {}
-        for key, value in response.headers:
-            response_headers[key] = value
-            
-        # Get response body
-        response_body = response.get_data(as_text=True)
-        
-        return {
-            'statusCode': response.status_code,
-            'headers': response_headers,
-            'body': response_body
-        }
-        
+        import serverless_wsgi
+        return serverless_wsgi.handle_request(app, event, context)
     except Exception as e:
         return {
             'statusCode': 500,

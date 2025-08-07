@@ -3,3 +3,4 @@ PyMuPDF==1.26.3
 python-docx==1.1.0
 requests==2.31.0
 reportlab==4.4.3
+serverless-wsgi==0.2.0
