@@ -1,0 +1,9 @@
+[build]
+  base = "resume_analyzer"
+  functions = "resume_analyzer/functions"
+  publish = "resume_analyzer"
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/app"
+  status = 200
