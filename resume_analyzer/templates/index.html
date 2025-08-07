@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ResumeRocket - AI Resume Analyzer</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <div class="logo">
+            <svg viewBox="0 0 40 40" class="logo-icon">
+              <!-- Document/Resume -->
+              <rect x="10" y="8" width="16" height="20" fill="#4caf50" rx="2"/>
+              <rect x="12" y="11" width="12" height="1.5" fill="white"/>
+              <rect x="12" y="14" width="8" height="1" fill="white"/>
+              <rect x="12" y="16.5" width="10" height="1" fill="white"/>
+              <rect x="12" y="19" width="6" height="1" fill="white"/>
+              <!-- Rocket -->
+              <polygon points="28,15 32,8 35,12 30,18" fill="#ff9800"/>
+              <circle cx="30" cy="14" r="1.5" fill="#f44336"/>
+              <!-- Exhaust -->
+              <polygon points="28,15 26,17 27,19 29,17" fill="#ffeb3b"/>
+            </svg>
+          </div>
+          <span class="brand-name">ResumeRocket</span>
+        </div>
+        <div class="nav-links">
+          <a href="/" class="nav-link active">Home</a>
+        </div>
+      </div>
+    </nav>
+    
+    <div class="container">
+      <h1>ResumeRocket</h1>
+      <p class="subtitle">Launch your career with AI-powered resume analysis</p>
+      
+      <div class="upload-section">
+        <form action="/analyze" method="post" enctype="multipart/form-data">
+          <div class="file-input-container">
+            <input type="file" name="resume" id="resume-file" accept=".pdf,.doc,.docx,.txt" />
+            <label for="resume-file" class="file-input-label">
+              <span class="upload-icon">📄</span>
+              <span class="upload-text">Choose Resume File</span>
+            </label>
+          </div>
+          <button type="submit" class="analyze-btn">Analyze Resume</button>
+        </form>
+      </div>
+      
+      <div class="instructions">
+        <div class="instruction-item">
+          <span class="step-number">1</span>
+          <p>Upload your resume (PDF, DOC, DOCX, or TXT)</p>
+        </div>
+        <div class="instruction-item">
+          <span class="step-number">2</span>
+          <p>Get instant ATS compatibility analysis</p>
+        </div>
+        <div class="instruction-item">
+          <span class="step-number">3</span>
+          <p>Download your improved resume</p>
+        </div>
+      </div>
+      
+      <div class="features">
+        <h3>🚀 Why Choose ResumeRocket:</h3>
+        <ul>
+          <li>🎯 ATS Compatibility Score (0-100)</li>
+          <li>🌈 Visual Text Highlighting</li>
+          <li>🤖 AI-Powered Improvements</li>
+          <li>⚡ Instant Download & Results</li>
+          <li>📱 Mobile-Responsive Design</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

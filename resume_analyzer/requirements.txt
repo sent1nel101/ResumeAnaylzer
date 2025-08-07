@@ -1,0 +1,7 @@
+Flask==2.0.1
+PyMuPDF==1.26.3
+python-docx==0.8.11
+pywin32==311
+requests==2.26.0
+transformers==4.16.2
+torch==2.8.0

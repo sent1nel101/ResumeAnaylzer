@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analysis Results - ResumeRocket</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <div class="logo">
+            <svg viewBox="0 0 40 40" class="logo-icon">
+              <!-- Document/Resume -->
+              <rect x="10" y="8" width="16" height="20" fill="#4caf50" rx="2"/>
+              <rect x="12" y="11" width="12" height="1.5" fill="white"/>
+              <rect x="12" y="14" width="8" height="1" fill="white"/>
+              <rect x="12" y="16.5" width="10" height="1" fill="white"/>
+              <rect x="12" y="19" width="6" height="1" fill="white"/>
+              <!-- Rocket -->
+              <polygon points="28,15 32,8 35,12 30,18" fill="#ff9800"/>
+              <circle cx="30" cy="14" r="1.5" fill="#f44336"/>
+              <!-- Exhaust -->
+              <polygon points="28,15 26,17 27,19 29,17" fill="#ffeb3b"/>
+            </svg>
+          </div>
+          <span class="brand-name">ResumeRocket</span>
+        </div>
+        <div class="nav-links">
+          <a href="/" class="nav-link">← Back to Home</a>
+        </div>
+      </div>
+    </nav>
+    
+    <div class="container results-container">
+      <h1>🚀 Analysis Results</h1>
+      <div class="results">
+        <div class="score-display">
+          <h2>ATS Score: {{ results['score'] }}/100</h2>
+          <h3>Grade: {{ results['grade'] }}</h3>
+        </div>
+        
+        <div class="feedback-section">
+          <h3>Analysis Feedback:</h3>
+          <ul>
+            {% for item in results['good'] %}
+            <li class="highlight-green">✓ {{ item }}</li>
+            {% endfor %} 
+            {% for item in results['needs_correction'] %}
+            <li class="highlight-yellow">⚠ {{ item }}</li>
+            {% endfor %} 
+            {% for item in results['fails'] %}
+            <li class="highlight-red">✗ {{ item }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      
+      <div class="document-section">
+        <h2>Highlighted Resume Analysis</h2>
+        <div class="document-display">
+          {{ highlighted_text|safe }}
+        </div>
+      </div>
+      
+      <div class="rewrite-section">
+        <h2>AI-Enhanced Resume</h2>
+        <div class="document-display">
+          <pre>{{ rewritten_text }}</pre>
+        </div>
+        <button onclick="downloadRewritten()">Download Improved Resume</button>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>
