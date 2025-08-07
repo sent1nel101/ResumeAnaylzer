@@ -72,7 +72,20 @@
         <div class="document-display">
           <pre>{{ rewritten_text }}</pre>
         </div>
-        <button onclick="downloadRewritten()">Download Improved Resume</button>
+        <div class="download-options">
+          <h3>Download Options:</h3>
+          <div class="download-buttons">
+            <button onclick="downloadRewritten('txt')" class="download-btn">
+              📄 Download as TXT
+            </button>
+            <button onclick="downloadRewritten('pdf')" class="download-btn">
+              📑 Download as PDF
+            </button>
+            <button onclick="downloadRewritten('docx')" class="download-btn">
+              📝 Download as DOCX
+            </button>
+          </div>
+        </div>
       </div>
     </div>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>

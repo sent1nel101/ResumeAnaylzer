@@ -40,6 +40,13 @@
       <h1>ResumeRocket</h1>
       <p class="subtitle">Launch your career with AI-powered resume analysis</p>
       
+      {% if error %}
+      <div class="error-message">
+        <span class="error-icon">⚠️</span>
+        {{ error }}
+      </div>
+      {% endif %}
+      
       <div class="upload-section">
         <form action="/analyze" method="post" enctype="multipart/form-data">
           <div class="file-input-container">
@@ -79,5 +86,6 @@
         </ul>
       </div>
     </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   </body>
 </html>
